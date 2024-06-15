@@ -14,10 +14,11 @@ data "aws_ami" "app_ami" {
   owners = ["979382823631"] # Bitnami
 }
 
-data "aws_vpc" "default" {
-  default = true
+resource "aws_default_vpc" "default" {
+  tags = {
+    Name = "Default VPC"
+  }
 }
-
 resource "aws_instance" "ec2Init" {
   ami           = data.aws_ami.app_ami.id
   instance_type = "t3.nano"
