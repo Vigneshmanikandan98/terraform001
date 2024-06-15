@@ -99,7 +99,7 @@ resource "aws_instance" "app1" {
   user_data              = file("${path.module}/app1-install.sh")
   key_name               = var.instance_keypair
   vpc_security_group_ids = [aws_security_group.vpc_ssh.id, aws_security_group.vpc_web.id]
-  for_each               = toset(aws_availability_zones.my_azones.names)
+  for_each               = toset(data.aws_availability_zones.my_azones.names)
   availability_zone      = each.key
   tags = {
     "Name" = "App1 Instance - ${each.key}"
