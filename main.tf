@@ -83,3 +83,17 @@ resource "aws_security_group" "vpc_web" {
     name = "allow-ssh"
   }
 }
+
+#EC2 Instance
+resource "aws_instance" "app1" {
+
+  ami = data.aws_ami.awslinux.id
+  instance_type = var.instance_type
+  user_data = file("${path.module}/app1-install.sh")
+  key_name = var.instance_keypair
+  security_groups = [ aws_security_group.vpc_ssh.id, aws_security_group.vpc_web.id ]
+  tags = {
+    name = "App1 Instance"
+  }
+  
+}
