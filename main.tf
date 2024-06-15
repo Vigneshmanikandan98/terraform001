@@ -90,7 +90,7 @@ resource "aws_instance" "app1" {
   instance_type = var.instance_type
   user_data = file("${path.module}/app1-install.sh")
   key_name = var.instance_keypair
-  security_groups = [ aws_security_group.vpc_ssh.id, aws_security_group.vpc_web.id ]
+  vpc_security_group_ids  = [ aws_security_group.vpc_ssh.id, aws_security_group.vpc_web.id ]
   tags = {
     "Name" = "App1 Instance"
   }
