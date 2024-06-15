@@ -34,11 +34,11 @@ output "instance_map_count" {
 #splat
 output "instance_splat" {
   description = "splat"
-  value       = aws_instance.app1.*.public_dns
+  value       = [for ins in aws_instance.app1 : ins.public_ip]
 }
 
 #splat 2
 output "instance_splat_co" {
   description = "spalat"
-  value       = aws_instance.app1[*].public_dns
+  value       = [for ins in aws_instance.app1 : ins.public_dns]
 }
