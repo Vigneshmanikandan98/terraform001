@@ -1,27 +1,11 @@
-data "aws_ami" "app_ami" {
-  most_recent = true
-
-  filter {
-    name   = "name"
-    values = ["bitnami-tomcat-*-x86_64-hvm-ebs-nami"]
-  }
-
-  filter {
-    name   = "virtualization-type"
-    values = ["hvm"]
-  }
-
-  owners = ["979382823631"] # Bitnami
-}
-
 resource "aws_default_vpc" "default" {
   tags = {
     Name = "Default VPC"
   }
 }
 resource "aws_instance" "ec2Init" {
-  ami           = data.aws_ami.app_ami.id
-  instance_type = "t3.nano"
+  ami           = "ami-08a0d1e16fc3f61ea"
+  instance_type = "t2.micro"
 
   tags = {
     Name = "HelloWorld"
