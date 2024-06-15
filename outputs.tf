@@ -7,7 +7,7 @@
 # #EC2 public DNS
 # output "app1PublicDns" {
 #   description = "public DNS"
-#   value = aws_instance.app1.public_dns
+#   value = aws_instance.app1.public_d
 
 #list
 output "instance_list" {
