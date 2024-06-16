@@ -40,3 +40,28 @@ module "my-vpc" {
     Environment = "dev"
   }
 }
+
+module "security-group" {
+  source  = "terraform-aws-modules/security-group/aws"
+  version = "5.1.2"
+
+  name = "My-SG"
+
+  vpc_id = module.my-vpc.vpc_id
+
+  ingress_rules       = ["http-80-tcp", "https-443-tcp"]
+  ingress_cidr_blocks = ["0.0.0.0/16"]
+  egress_rules        = ["all-all"]
+  egress_cidr_blocks  = ["0.0.0.0/24"]
+}
+
+resource "aws_instance" "newEc2" {
+  ami           = "ami-08a0d1e16fc3f61ea"
+  instance_type = "t3.micro"
+
+  security_groups = [module.security-group.security_group_id]
+
+  tags = {
+    "name" = "Hello"
+  }
+}
