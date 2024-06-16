@@ -41,10 +41,8 @@
 #   }
 # }
 
-resource "aws_default_vpc" "default" {
-  tags = {
-    "Name" = "Default VPC"
-  }
+data "aws_vpc" "default" {
+  default = true
 }
 
 module "security-group" {
@@ -53,7 +51,7 @@ module "security-group" {
 
   name = "My-SG"
 
-  vpc_id = aws_default_vpc.default.id
+  vpc_id = data.aws_vpc.default.id
 
   ingress_rules       = ["http-80-tcp", "https-443-tcp"]
   ingress_cidr_blocks = ["0.0.0.0/16"]
@@ -65,7 +63,9 @@ resource "aws_instance" "newEc2" {
   ami           = "ami-08a0d1e16fc3f61ea"
   instance_type = "t3.micro"
 
-  security_groups = [module.security-group.security_group_id]
+  #security_groups = [module.security-group.security_group_id]
+
+  vpc_security_group_ids = [module.security-group.security_group_id]
 
   tags = {
     "name" = "Hello"
