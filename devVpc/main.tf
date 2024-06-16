@@ -1,43 +1,49 @@
-module "my-vpc" {
-  source = "terraform-aws-modules/vpc/aws"
+# module "my-vpc" {
+#   source = "terraform-aws-modules/vpc/aws"
 
-  #basic details
-  name = "my-vpc"
-  cidr = "10.0.0.0/16"
+#   #basic details
+#   name = "my-vpc"
+#   cidr = "10.0.0.0/16"
 
-  # azs and subnets
-  azs             = ["us-east-1a", "us-east-1b"]
-  private_subnets = ["10.0.1.0/24", "10.0.2.0/24"]
-  public_subnets  = ["10.0.101.0/24", "10.0.102.0/24"]
+#   # azs and subnets
+#   azs             = ["us-east-1a", "us-east-1b"]
+#   private_subnets = ["10.0.1.0/24", "10.0.2.0/24"]
+#   public_subnets  = ["10.0.101.0/24", "10.0.102.0/24"]
 
-  #database subnets
-  create_database_subnet_group       = true
-  create_database_subnet_route_table = true
-  database_subnets                   = ["10.0.151.0/24", "10.0.152.0/24"]
+#   #database subnets
+#   create_database_subnet_group       = true
+#   create_database_subnet_route_table = true
+#   database_subnets                   = ["10.0.151.0/24", "10.0.152.0/24"]
 
-  #nat gateway
-  enable_nat_gateway = true
-  single_nat_gateway = true
+#   #nat gateway
+#   enable_nat_gateway = true
+#   single_nat_gateway = true
 
-  #dns
-  enable_dns_hostnames = true
-  enable_dns_support   = true
+#   #dns
+#   enable_dns_hostnames = true
+#   enable_dns_support   = true
 
-  public_subnet_tags = {
-    Name = "Public-Subnets-Vpc"
-  }
+#   public_subnet_tags = {
+#     Name = "Public-Subnets-Vpc"
+#   }
 
-  private_subnet_tags = {
-    Name = "Private-Subnets-Vpc"
-  }
+#   private_subnet_tags = {
+#     Name = "Private-Subnets-Vpc"
+#   }
 
-  database_subnet_tags = {
-    Name = "Db-Subnets"
-  }
+#   database_subnet_tags = {
+#     Name = "Db-Subnets"
+#   }
 
+#   tags = {
+#     Terraform   = "true"
+#     Environment = "dev"
+#   }
+# }
+
+resource "aws_default_vpc" "default" {
   tags = {
-    Terraform   = "true"
-    Environment = "dev"
+    "Name" = "Default VPC"
   }
 }
 
@@ -47,7 +53,7 @@ module "security-group" {
 
   name = "My-SG"
 
-  vpc_id = module.my-vpc.vpc_id
+  vpc_id = aws_default_vpc.default.id
 
   ingress_rules       = ["http-80-tcp", "https-443-tcp"]
   ingress_cidr_blocks = ["0.0.0.0/16"]
